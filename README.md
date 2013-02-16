@@ -17,4 +17,6 @@ $(document).ready(function() {
     // With callback
     $('#dateTimeEntry').dateTimeEntry({
         callback : function(ui, event) { alert('hello');
-    })
+    });
+});
+</script>
