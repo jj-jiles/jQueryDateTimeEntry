@@ -1,0 +1,159 @@
+
+@grey_lightest          : lighten(@grey_medium, 15%);
+@grey_lighter           : lighten(@grey_medium, 8%);
+@grey_light             : lighten(@grey_medium, 5%);
+@grey_medium            : #e8e8e8;
+@grey_dark              : #d3d3d3;
+@grey_darker            : #cbcbcb;
+@grey_darkest           : #979797;
+
+@blue_lightest          : lighten(#65c2e8, 15%);
+@blue_lighter           : #65c2e8;
+@blue_light             : #3ca6d2;
+@blue_medium            : darken(@blue_light, 10%);
+@blue_dark              : darken(@blue_light, 20%);
+@blue_darker            : darken(@blue_dark, 10%);
+@blue_darkest           : darken(@blue_darker, 10%);
+@text_shadow_light      : 1px 1px 1px #ffffff;
+@text_shadow_dark       : 1px 1px 1px rgba(0,0,0,0.2);
+
+
+.text_shadow(@args: @text_shadow_dark) {
+    text-shadow: @args;
+}
+
+.text_shadow_dark() {
+    text-shadow: @text_shadow_dark;
+}
+
+.gradient( @start, @end, @start_point: 0%, @stop_point: 100% )  {
+	background: @start; /* Old browsers */
+	background: -moz-linear-gradient(top, @start @start_point, @end @stop_point,@end); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(@start_point,@start), color-stop(@stop_point,@end)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, @start 0% ,@end 100% ); /* Chrome10+,Safari5.1+ */
+	background-image: -ms-linear-gradient(top, @start @start_point,@end @stop_point); /* IE10+ */
+	background: -o-linear-gradient(top, @start @start_point,@end @stop_point); /* Opera11.10+ */
+	filter    : e("progid:DXImageTransform.Microsoft.gradient( startColorstr=@{start}, endColorstr=@{end},GradientType=0 )"); /* IE6-9 */
+	background: linear-gradient(top, @start @start_point,@end @stop_point); /* W3C */
+}
+
+.shadow( @style, @color ) when ( iscolor( @color ) ) {
+	box-shadow: @style @color;
+	-webkit-box-shadow: @style @color;
+	-moz-box-shadow: @style @color;
+}
+
+.shadow( @style, @alpha:75% ) when ( isnumber( @alpha ) ) {
+	.shadow( @style, rgba( 0, 0, 0, @alpha ) );
+}
+
+
+.radius( @radius:@container_border_radius ) {
+	border-radius: @radius;
+	-webkit-border-radius: @radius;
+	-moz-border-radius: @radius;
+}
+.inline_block() {
+    display: inline-block; *display: inline; *zoom: 1;
+}
+
+@import url(http://fonts.googleapis.com/css?family=Roboto:300);
+
+html { font-size: 16px; }
+
+body { 
+	font-family: 'Roboto', sans-serif;
+	font-size: 1em;
+	margin: 0 auto;
+	text-align: center;
+	background: @grey_medium;
+}
+
+h1 { font-size: 1.2em; text-shadow: 1px 1px 0 #fff; }
+p { font-size: 1em; padding: 8px; }
+
+.wrapper {
+	margin: 20px auto;
+	padding: 20px;
+	.radius(12px);
+	width: 50%;
+	min-height: 500px;
+	background: @grey_light;
+	border: 1px solid @grey_dark;
+	.shadow(inset 0 0 6px, rgba(0,0,0,0.1));
+}
+
+
+#dateTimeEntryExample {
+	position: relative; 
+	z-index: 10;
+	.inline_block(); 
+	padding: 2px;
+
+	em {
+		position: relative; 
+		z-index: 20;
+		cursor: pointer; 
+		color: @blue_medium; 
+		background: @grey_medium; 
+		text-shadow: 1px 1px 0 #fff;
+		padding: 4px;
+		.radius(4px); 
+		border: 3px solid transparent; 
+		font-style: normal; 
+	}
+
+	&.selected, &:HOVER {
+		position: relative; 
+		em {
+			border-color: @blue_lighter;
+			background: @blue_lighter;
+			.text_shadow();
+			color: @grey_lightest; 
+		}
+	}
+
+
+	&.selected {
+		z-index: 40;
+	}
+	
+	
+	.select-options-menu { 
+		font-size: 1em;
+		list-style: none;
+		display: none; 
+		position: absolute; 
+		cursor: pointer;
+		margin-left: -14px;
+		margin-top: -4px;
+		width: auto;
+		min-width: 250px;
+		padding: 4px; 
+		color: #444; 
+		font-weight: normal;
+		font-size: 12px; 
+		line-height: 125%; 
+		text-align: left; 
+		.radius(4px);
+		.shadow(0 8px 32px, rgba(0,0,0,0.22));
+		background: @blue_lighter;
+
+
+		ul, p, div {
+			width: 100%; 
+			position: relative; 
+			z-index: 20;
+			margin: 0;
+			.gradient(@grey_lighter, @grey_light, 0, 100);
+			.shadow(0 0 3px, rgba(0,0,0,0.3)); 
+		}
+
+		input { text-shadow: 0 0 0 transparent;}
+
+		p { width: 96%; padding: 10px 6px; white-space: nowrap; }
+
+		.one { width: 35px; }
+		.four { width: 45px; }
+	}
+}

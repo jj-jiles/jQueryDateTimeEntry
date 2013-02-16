@@ -68,7 +68,6 @@
 			this.unbind('click').on('click', function() {
 				options.Parent = $(this);
 				if ( options.Parent.find(options.PopUpClass).length == 0) {
-					console.log(options.PlaceHolder);
 					if ( options.Parent.find(options.PlaceHolder).length == 0 ) {
 						methods.createDateTimePlaceholder();
 					}
@@ -89,6 +88,7 @@
 		hideDateTimeEntry : function(event) {
 			if (  options.dateTimeEntryDisplay.length > 0 && options.dateTimeEntryDisplay.is(':visible') ) {
 				options.dateTimeEntryDisplay.hide();
+				$.tooltip('destroy');
 				options.Parent.removeClass('selected');
 				options.Parent.find(options.PopUpClass).remove();
 				
@@ -158,7 +158,7 @@
 
 			$(document).unbind('mouseup').on('mouseup', function (event) {
 				if (options.Parent.has(event.target).length === 0) {
-					methods.hideDateTimeEntry(e);
+					methods.hideDateTimeEntry(event);
 				}
 			});
 

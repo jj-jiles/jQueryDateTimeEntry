@@ -1,0 +1,33 @@
+<html>
+	<head>
+		<title>jQuery dateTimeEntry Plugin</title>
+		<link rel="stylesheet" type="text/css" href="normalize.css" />
+		<link rel="stylesheet" type="text/css" href="styles.css" />
+		<link rel="stylesheet" type="text/css" href="forms.css" />
+		<link rel="stylesheet" type="text/css" href="jquery.tooltip.css" />
+	</head>
+<body>
+
+	<section class="wrapper">
+		<h1>A jQuery DateTime Entry Plugin</h1>
+		<p><span id="dateTimeEntryExample"><em></em></span></p>
+	</section>
+	
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	<script type="text/javascript" src="moment.min.js"></script>
+	<script type="text/javascript" src="jquery.tooltip.js"></script>
+	<script type="text/javascript" src="jquery.dateTimeEntry.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$('#dateTimeEntryExample> em').text(moment().format('MM/DD/YYYY HH:mm:ss'))
+			$('#dateTimeEntryExample').dateTimeEntry({
+				PlaceHolder : 'em',
+				callback : function(ui, event) { 
+					console.log(ui);
+					//alert('check the console for the output of ui'); 
+				}
+			});
+		})
+	</script>
+</body>
+</html>

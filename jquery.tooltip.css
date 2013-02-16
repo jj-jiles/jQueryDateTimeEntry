@@ -1,0 +1,41 @@
+
+	#tooltip-hover-pointer { 
+		display: block; 
+		*display: none; 
+		position: absolute; 
+		z-index: 6; 
+		left: 50%; 
+		margin: -24px 0 0 -8px;
+		width: 0; 
+		height: 0; 
+		border-left: 5px solid transparent;
+		border-right: 5px solid transparent;
+		border-bottom: 12px solid rgba(48,46,43,0.7);
+  		filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#60000000,endColorstr=#60000000);
+		background: transparent;
+	}
+	#tooltip-hover { 
+		display: none; 
+		visibility: hidden;
+		position: absolute; 
+		cursor: default;
+		z-index: 1000; 
+		max-width: 250px; 
+		padding: 12px; 
+		color: #fff!important; 
+		font-weight: normal;
+		font-size: 12px; 
+		line-height: 125%; 
+		margin-top: 12px;
+		text-align: left; 
+		border-radius: 4px;
+		-webkit-border-radius: 4px;
+		-moz-border-radius: 4px;
+		box-shadow: 0 1px 5px rgba(0, 0, 0, 0.22);
+		-webkit-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.22);
+		-moz-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.22);
+		background: transparent;
+		filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#60000000,endColorstr=#60000000);
+		zoom: 1;
+		background: rgba(48, 46, 43, 0.7);
+	}
