@@ -86,14 +86,14 @@
 		},
 
 
-		hideDateTimeEntry : function() {
+		hideDateTimeEntry : function(event) {
 			if (  options.dateTimeEntryDisplay.length > 0 && options.dateTimeEntryDisplay.is(':visible') ) {
 				options.dateTimeEntryDisplay.hide();
 				options.Parent.removeClass('selected');
 				options.Parent.find(options.PopUpClass).remove();
 				
 				if ( options.hasCallback && options.DateTime != options.OriginalDateTime ) {
-					options.callback(options);
+					options.callback(options, event);
 				}
 			}
 		},
@@ -156,9 +156,9 @@
 
 			methods.showDateTimeEntry();
 
-			$(document).unbind('mouseup').on('mouseup', function (e) {
-				if (options.Parent.has(e.target).length === 0) {
-					methods.hideDateTimeEntry();
+			$(document).unbind('mouseup').on('mouseup', function (event) {
+				if (options.Parent.has(event.target).length === 0) {
+					methods.hideDateTimeEntry(e);
 				}
 			});
 
@@ -230,7 +230,7 @@
 						//
 						// User pressed the Esc button. We'll assume they want to close dateTimeEntry
 						if ( event.keyCode == 27 || event.keyCode == 13 ) {
-							methods.hideDateTimeEntry();
+							methods.hideDateTimeEntry(event);
 
 						//
 						// any other keystroke
