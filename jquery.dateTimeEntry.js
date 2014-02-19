@@ -48,8 +48,8 @@
 		popupLayout : function() {
 
 			methods.init();
-			html = '<div class="select-options-menu"><div class="pointer"></div>';
-			html += '<p>' + options.displayText + '</p>';
+			html = '<div class="jqDateTimeEntry select-options-menu"><div class="pointer"></div>';
+			html += '<p class="jqDTETop"><span>' + options.displayText + '</span><span class="nowDate">Now()</span></p>';
 			html += '<p>';
 			html += '<input type="text" id="dateTimeEntryMonth" name="dateTimeEntryMonth" class="one dateformat-input month" value="MM" maxlength="2" />&nbsp;';
 			html += '/&nbsp;&nbsp;<input type="text" id="dateTimeEntryDay" name="dateTimeEntryMonth" class="one dateformat-input day" value="DD" maxlength="2" />&nbsp;';
@@ -85,15 +85,17 @@
 		},
 
 
-		hideDateTimeEntry : function(event) {
+		hideDateTimeEntry : function() {
 			if (  options.dateTimeEntryDisplay.length > 0 && options.dateTimeEntryDisplay.is(':visible') ) {
 				options.dateTimeEntryDisplay.hide();
-				$.tooltip('destroy');
 				options.Parent.removeClass('selected');
 				options.Parent.find(options.PopUpClass).remove();
 				
+				window.clearTimeout(methods.KeyDownTimeOut);
+				window.clearTimeout(methods.KeyUpTimeOut);
+				
 				if ( options.hasCallback && options.DateTime != options.OriginalDateTime ) {
-					options.callback(options, event);
+					options.callback(options);
 				}
 			}
 		},
@@ -107,8 +109,17 @@
 
 		updateDateTime : function(objOptions) {
 			methods.init(objOptions);
-			options.DateTime = DateTime.Month + '/' + DateTime.Day + '/' + DateTime.Year + ' ' + DateTime.Hours + ':' + DateTime.Minutes + ':' + DateTime.Seconds;
-			options.domPlaceHolder.text(options.DateTime);
+			isnan=false;
+			for (var prop in DateTime) {
+				if ( isNaN(DateTime[prop]) || DateTime[prop].length == 0 || DateTime[prop] == 0) {
+					isnan = true;
+					break;
+				}
+			}
+			if (!isnan ) {
+				options.DateTime = DateTime.Month + '/' + DateTime.Day + '/' + DateTime.Year + ' ' + DateTime.Hours + ':' + DateTime.Minutes + ':' + DateTime.Seconds;
+				options.domPlaceHolder.text(options.DateTime);
+			}
 		},
 
 
@@ -156,9 +167,9 @@
 
 			methods.showDateTimeEntry();
 
-			$(document).unbind('mouseup').on('mouseup', function (event) {
-				if (options.Parent.has(event.target).length === 0) {
-					methods.hideDateTimeEntry(event);
+			$(document).unbind('mouseup').on('mouseup', function (e) {
+				if (options.Parent.has(e.target).length === 0) {
+					methods.hideDateTimeEntry();
 				}
 			});
 
@@ -177,6 +188,7 @@
 					_this.unbind('keydown').on('keydown', function(event) {
 						var _value  = _this.attr('value');
 						var _length = _value.length;
+						window.clearTimeout(methods.KeyDownTimeOut);
 
 						//
 						// We do not want to block keystrokes such as Tab, Enter, Shift, Esc, etc.
@@ -199,9 +211,9 @@
 						// The user presses Tab while the Seconds input is focused, redirect the focus to the Month input
 						if ( $(this).hasClass('seconds') && event.keyCode == 9) {
 							event.preventDefault();
-							window.setTimeout(function() {
+							methods.KeyDownTimeOut = window.setTimeout(function() {
 								$('.dateformat-input.month').select();
-							}, 50);
+							}, 100);
 							return false;
 						}
 						
@@ -224,13 +236,14 @@
 					// Bind keyup event
 					_this.unbind('keyup').on('keyup', function(event) {
 						var _value = _this.attr('value');
+						window.clearTimeout(methods.KeyUpTimeOut);
 
 						var acceptableKeys = (event.keyCode >= 8 && event.keyCode <= 46) ? true : false;
 
 						//
 						// User pressed the Esc button. We'll assume they want to close dateTimeEntry
 						if ( event.keyCode == 27 || event.keyCode == 13 ) {
-							methods.hideDateTimeEntry(event);
+							methods.hideDateTimeEntry();
 
 						//
 						// any other keystroke
@@ -239,7 +252,7 @@
 							//
 							// user has entered the max allowed characters. tab to next input
 							if ( _value.length == AllowedLength && !acceptableKeys ) {
-								window.setTimeout(function() {
+								methods.KeyUpTimeOut = window.setTimeout(function() {
 									_this.next('.dateformat-input').select();
 								}, 100);
 							}
@@ -247,7 +260,7 @@
 							//
 							// user has entered max allowed characters in the Seconds input. tab back to month
 							if ( $(this).hasClass('seconds') && _value.length == AllowedLength && !acceptableKeys ) {
-								window.setTimeout(function() {
+								methods.KeyUpTimeOut = window.setTimeout(function() {
 									$('.dateformat-input.month').select();
 								}, 100);
 							}
@@ -313,6 +326,32 @@
 
 					})
 
+
+				});
+
+
+				options.dateTimeEntryDisplay.find('.nowDate').unbind('click').bind('click', function() {
+
+					var DateTimeObject = moment();
+
+					//
+					// Create a DateTime object that has the DateTime split
+					DateTime = {
+						Day     : methods.makeIntDouble(DateTimeObject.date()),
+						Month   : methods.makeIntDouble(DateTimeObject.month()+1),
+						Year    : DateTimeObject.year(),
+						Hours   : methods.makeIntDouble(DateTimeObject.hours()),
+						Minutes : methods.makeIntDouble(DateTimeObject.minutes()),
+						Seconds : methods.makeIntDouble(DateTimeObject.seconds())
+					}
+
+
+					options.Parent.find( '#' + options.id + 'Month').val(DateTime.Month);
+					options.Parent.find( '#' + options.id + 'Day').val(DateTime.Day);
+					options.Parent.find( '#' + options.id + 'Year').val(DateTime.Year);
+					options.Parent.find( '#' + options.id + 'Hours').val(DateTime.Hours);
+					options.Parent.find( '#' + options.id + 'Minutes').val(DateTime.Minutes);
+					options.Parent.find( '#' + options.id + 'Seconds').val(DateTime.Seconds).change();
 
 				});
 		},
